@@ -6,7 +6,8 @@ import { Activity, Brain, Calendar, Flame, Home, Medal, Swords, Target, Trophy, 
 import { archetypeStyle } from './utils/archetypes';
 import './style.css';
 
-const API = 'http://127.0.0.1:8000';
+const API =
+  import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
 async function get(path){ const r=await fetch(API+path); if(!r.ok) throw new Error(path); return r.json(); }
 const nav=[['dashboard','Dashboard',Home],['hot','Hot Players',Flame],['command','AI Command Center',Brain],['matchup','Matchup Engine',Swords],['parlay','Parlay Lab',Target],['player','Player Details',User],['aging','Aging Curves',TrendingUp],['schedule','Strength Ranking',Calendar],['misc','League Intelligence',Activity]];
 function useApi(path){ const [state,setState]=useState({status:'loading',data:null,error:null}); const load=()=>{setState({status:'loading',data:null,error:null}); get(path).then(data=>setState({status:'ready',data,error:null})).catch(error=>setState({status:'error',data:null,error}));}; useEffect(load,[path]); return {...state,retry:load}; }
